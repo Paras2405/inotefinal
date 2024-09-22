@@ -42,7 +42,7 @@ class App extends Component {
        
       />
           <Routes>
-          
+          <Route path="/" element={<Navigate to="/general" />} />
             <Route path="/general" element={<News  setProgress={this.setProgress} apiKey={this.apiKey} key="general" pagesize={6} country="us" category="general" />} />
             <Route path="/business" element={<News  setProgress={this.setProgress} apiKey={this.apiKey} key="business" pagesize={6} country="us" category="business" />} />
             <Route path="/entertainment" element={<News setProgress={this.setProgress} apiKey={this.apiKey} key="entertainment" pagesize={6} country="us" category="entertainment" />} />

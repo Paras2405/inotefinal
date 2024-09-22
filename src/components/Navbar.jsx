@@ -43,7 +43,7 @@ class Navbar extends Component{
       <div className={`form-check form-switch text-${this.props.mode==='light'?'dark':'light'}`}>
   <input className="form-check-input"  type="checkbox"  onChange={this.handleToggle} 
                 checked={this.props.mode === 'dark'} role="switch" id="flexSwitchCheckDefault" style={{cursor:"pointer"}}/>
-  <label className="form-check-label" for="flexSwitchCheckDefault" style={{color:this.props.mode==='dark'?'dark':'light'}}>{this.props.mode}</label>
+  <label className="form-check-label" htmlFor="flexSwitchCheckDefault" style={{color:this.props.mode==='dark'?'dark':'light'}}>{this.props.mode}</label>
 </div>
     </div>
   </div>
