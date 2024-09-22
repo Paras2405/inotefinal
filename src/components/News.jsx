@@ -30,8 +30,21 @@ class News extends Component {
   }
   async componentDidMount() {
     this.props.setProgress(10);
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=1&pagesize=${this.props.pagesize}`;
-    
+    //let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=1&pagesize=${this.props.pagesize}`;
+    let url = `https://cors-anywhere.herokuapp.com/https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=1&pagesize=${this.props.pagesize}`;
+
+    fetch(url)
+  .then(response => response.json())
+  .then(data => {
+    console.log("Parsed Data:", data); // Check this log to see if articles are being returned
+    if (data.articles) {
+      this.setState({ articles: data.articles });
+    } else {
+      console.error("No articles found");
+    }
+  })
+  .catch(error => console.error("Error fetching articles:", error));
+
     this.setState({ loading: true });
 
     try {
@@ -102,7 +115,9 @@ class News extends Component {
    }*/
   handlePrevClick = async () => {
     this.props.setProgress(10);
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page-1}&pagesize=${this.props.pagesize}`
+    //let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page-1}&pagesize=${this.props.pagesize}`
+    let url = `https://cors-anywhere.herokuapp.com/https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=1&pagesize=${this.props.pagesize}`;
+
     this.setState({loading:true})
     let data = await fetch(url)
     this.props.setProgress(30);
@@ -125,7 +140,9 @@ class News extends Component {
   handleNextClick = async () => {
     if(this.state.page + 1 <= Math.ceil(this.state.totalResults / this.props.pagesize)){
       this.props.setProgress(10);
-      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page + 1}&pagesize=${this.props.pagesize}`
+     // let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page + 1}&pagesize=${this.props.pagesize}`
+     let url = `https://cors-anywhere.herokuapp.com/https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=1&pagesize=${this.props.pagesize}`;
+
       this.setState({loading:true})
       let data = await fetch(url)
       this.props.setProgress(30);
