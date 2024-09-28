@@ -41,41 +41,57 @@ router.post('/addnote', fetchuser, [
 })
 //Update notes using  Route 3 PUT "api/notes/updatenote/:id" Login required
 //method('endpoint',middleware,function)
-router.put('/updatenote/:id', fetchuser, async (req, res) => {
+const mongoose = require('mongoose');
 
-    //create new note from title desc tag using destructuring
+// Update notes route
+router.put('/updatenote/:id', fetchuser, async (req, res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        console.log('Invalid note id')
+        return res.status(400).send("Invalid note ID");
+    }
+
     const newNote = {};
-    const { title, description, tag } = req.body
-    //check if the note created matches with previous title,desc,tag
-    if (title) {
-        newNote.title = title
+    const { title, description, tag } = req.body;
+    if (title) newNote.title = title;
+    if (description) newNote.description = description;
+    if (tag) newNote.tag = tag;
+
+    let note = await Notes.findById(req.params.id);
+    if (!note) {
+        console.log('Note not found') 
+        return res.status(404).send("Not found");
     }
-    if (description) {
-        newNote.description = description
+    if (note.user.toString() !== req.user.id) {
+        console.log('User unauthorized')
+        return res.status(401).send("Unauthorized");
     }
-    if (tag) {
-        newNote.tag = tag
+
+    note = await Notes.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true });
+    res.json(note);
+});
+
+// Delete notes route
+router.delete('/deletenote/:id', fetchuser, async (req, res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        console.log('Invalid id')
+        return res.status(400).json("Invalid note");
     }
-    //Find the note to be updated and update it
-    let note = await Notes.findById(req.params.id)
-    //If note does not exist
+
+    let note = await Notes.findById(req.params.id);
     if (!note) {
         console.log('Note not found')
-        return res.status(404).send("Not found")
-
+        return res.status(404).send("Not found");
     }
-    //If note is accessed by unauthorized user
     if (note.user.toString() !== req.user.id) {
-        console.log('Note cannot be updated')
-        return res.status(401).send("Unauthorized")
-
+        console.log('User unauthorized')
+        return res.status(401).send("Unauthorized");
     }
-    //note updated
-    note = await Notes.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true })
-    res.json({ note })
-    console.log('Note updated')
 
-})
+    await Notes.findByIdAndDelete(req.params.id);
+    console.log('Note deleted')
+    res.json({ message: "Note deleted successfully" });
+});
+
 //Delete note using  Route 4 DELETE "api/notes/deletenote/:id" Login required
 //method('endpoint',middleware,function)
 

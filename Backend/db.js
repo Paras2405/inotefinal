@@ -1,11 +1,13 @@
+
+require('dotenv').config();
 const mongoose=require('mongoose')
 
-
 //define mongoDB connection url
-const MongoURI="mongodb+srv://paraskadam0605:uz9S18xVFTAIYjQj@cluster0.kfvv7.mongodb.net/"
+//const MongoURI="mongodb+srv://paraskadam0605:uz9S18xVFTAIYjQj@cluster0.kfvv7.mongodb.net/"
+const MongoURI=process.env.MONGO_URI||"mongodb+srv://paraskadam0605:uz9S18xVFTAIYjQj@cluster0.kfvv7.mongodb.net/"
 //const mongoURL=process.env.DBURL_LOCAL
 //const mongoURL=process.env.DBURL;
-const port=3000
+const port=process.env.PORT ||3000
 
 
 mongoose.connect( MongoURI, {

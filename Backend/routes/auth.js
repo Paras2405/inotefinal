@@ -4,7 +4,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
-const JWT_SECRET = 'Parasis@good$boy';
+const JWT_SECRET =process.env.JWT_SECRET||"Parasis@good$boy"
 const fetchuser = require('../middleware/fetchuser');
 
 // Create a user using POST "/api/auth/"
@@ -13,6 +13,7 @@ router.post('/createuser', [
     body('email', 'Enter correct email address').isEmail(),
     body('password', 'Password must be at least 5 characters').isLength({ min: 5 })
 ], async (req, res) => {
+    let success=false
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -21,7 +22,7 @@ router.post('/createuser', [
     try {
         let user = await User.findOne({ email: req.body.email });
         if (user) {
-            return res.status(400).json({ message: 'User already exists' });
+            return res.status(400).json({ success:false,error: 'User already exists' });
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -37,7 +38,8 @@ router.post('/createuser', [
             id: user.id
         };
         const jwtData = jwt.sign(data, JWT_SECRET);
-        res.json({ authtoken: jwtData });
+        success=true
+        res.json({success, authtoken: jwtData });
 
     } catch (err) {
         console.error(err);
@@ -50,6 +52,7 @@ router.post('/login', [
     body('email', 'Enter valid email').isEmail(),
     body('password', 'Password cannot be blank').exists()
 ], async (req, res) => {
+    let success=false
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -58,19 +61,22 @@ router.post('/login', [
     try {
         let user = await User.findOne({ email: req.body.email });
         if (!user) {
-            return res.status(400).json({ message: 'Invalid credentials' });
+            success=false
+            return res.status(400).json({ success,message: 'User does not exist' });
         }
 
         const passwordCompare = await bcrypt.compare(req.body.password, user.password);
         if (!passwordCompare) {
-            return res.status(400).json({ error: 'Invalid credentials' });
+            success=false
+            return res.status(400).json({success,error: 'Password of the user is incorrect' });
         }
 
         const data = {
             id: user.id
         };
         const authtoken = jwt.sign(data, JWT_SECRET);
-        res.json({ authtoken });
+        success=true
+        res.json({success, authtoken });
 
     } catch (err) {
         console.error(err);
