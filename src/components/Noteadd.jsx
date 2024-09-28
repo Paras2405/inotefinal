@@ -5,11 +5,22 @@ const addNote = (props) => {
   const context = useContext(noteContext);
   const {addNote } = context;
   const {showAlert}=props
-  const [note,setNote] = useState({title:"",description:"",tag:"default"})
+  const [note,setNote] = useState({title:"",description:"",tag:""})
   const handleClick=(e)=>{
+
     e.preventDefault()
-  addNote(note.title,note.description,note.tag)
-  showAlert("Note added successfully", "warning");
+    if(note.title==""|| note.description==""|| note.tag==""){
+      showAlert("Please check out fields", "warning");
+    }
+    else if(note.title.length<5 ||note.description.length<5||note.tag.length<2 ){
+      showAlert("Please enter Note correctly", "warning");
+    }
+    else{
+      addNote(note.title,note.description,note.tag)
+      showAlert("Note added successfully", "success");
+    }
+
+ 
   }
 
   const onChange=(e)=>{
