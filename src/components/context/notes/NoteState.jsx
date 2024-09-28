@@ -31,6 +31,7 @@ import Alert from "../../Alert";
 
 const NoteState = (props) => {
   const host = 'https://inote-backend-3.onrender.com'
+ //const host = 'https://inote-backend.vercel.app'
   const notesinitial = []
 
   
@@ -125,6 +126,7 @@ const getNote=async()=>{
   //api call
   
   const response = await fetch(`${host}/api/notes/fetchallnotes`, {
+      mode: 'no-cors',
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
