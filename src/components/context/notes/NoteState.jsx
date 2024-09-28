@@ -30,7 +30,7 @@ import { useState } from "react";
 import Alert from "../../Alert";
 
 const NoteState = (props) => {
-  const host = 'http://localhost:3000'
+  const host = 'https://inote-backend-3.onrender.com'
   const notesinitial = []
 
   
