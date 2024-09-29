@@ -30,7 +30,7 @@ import { useState } from "react";
 import Alert from "../../Alert";
 
 const NoteState = (props) => {
-  const host = 'https://technotes-api.onrender.com'
+  const host = 'https://technotesupgradedbackend.onrender.com/'
  //const host = 'https://inote-backend.vercel.app'
   const notesinitial = []
 
