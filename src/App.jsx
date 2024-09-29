@@ -8,6 +8,7 @@ import './index.css'
 import NoteState from './components/context/notes/NoteState';
 import Alert from './components/Alert';
 import { useState } from 'react';
+import Welcome from './components/Welcome';
 
 
 function App(){
@@ -28,7 +29,7 @@ function App(){
            <Alert alert={alert}></Alert>
         
           <Routes>
-          <Route path="/" element={<Navigate to="/Login" />} />
+          <Route path="/" element={<Welcome />} />
             <Route path="/Home" element={<Home showAlert={showAlert}/>} />
             <Route path="/About" element={<About />} />
             <Route path="/Login" element={<Login showAlert={showAlert}/>} />
