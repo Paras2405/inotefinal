@@ -30,7 +30,7 @@ import { useState } from "react";
 import Alert from "../../Alert";
 
 const NoteState = (props) => {
-  const host = 'https://inote-backend-3.onrender.com'
+  const host = 'https://technotes-api.onrender.com'
  //const host = 'https://inote-backend.vercel.app'
   const notesinitial = []
 
@@ -51,7 +51,7 @@ const NoteState = (props) => {
       body: JSON.stringify({title,description,tag})
 
     })
-  const json=response.json()
+  const json= await response.json()
     const note = {
       "_id": "66f1bba9c6df7680eeb07c02",
       "user": "66ec6f788c0532ee4a41f25d",
@@ -124,9 +124,8 @@ const NoteState = (props) => {
 //fetch notes
 const getNote=async()=>{
   //api call
-  
+
   const response = await fetch(`${host}/api/notes/fetchallnotes`, {
-      mode: 'no-cors',
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -135,6 +134,12 @@ const getNote=async()=>{
 
 
   })
+  if (response.status === 401) {
+    alert('Unauthorized access. Please log in again.'); // Inform user
+    // Optionally, redirect to login page
+    return;
+}
+
   
   const json = await response.json()
   console.log(json)
